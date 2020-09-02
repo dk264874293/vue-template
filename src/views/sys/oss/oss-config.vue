@@ -4,8 +4,9 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
     :show-close="false"
+    :close-on-press-escape="false"
   >
-    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="120px" @keyup.enter.native="dataFormSubmit()">
+    <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="130px" @keyup.enter.native="dataFormSubmit()">
       <el-form-item size="mini" label="存储类型">
         <el-radio-group v-model="dataForm.type">
           <el-radio :label="1">七牛</el-radio>
@@ -119,8 +120,9 @@ export default {
     visible(newData, oldData) {
       if (newData) {
         getSysOssConfig()
-          .then(({ data }) => {
-            this.dataForm = data && data.code === 0 ? { ...data.config } : {
+          .then((res) => {
+            console.log(res)
+            this.dataForm = res && res.code === 0 ? { ...res.config } : {
               qiniuDomain: '',
               qiniuPrefix: '',
               qiniuAccessKey: '',

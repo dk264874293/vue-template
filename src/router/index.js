@@ -36,53 +36,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
   }
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/dashboard',
-  //   children: [{
-  //     path: 'dashboard',
-  //     name: 'Dashboard',
-  //     component: () => import('@/views/dashboard/index'),
-  //     meta: { title: 'Dashboard', icon: 'dashboard' }
-  //   }]
-  // }
-  // {
-  //   path: '/sys',
-  //   component: Layout,
-  //   redirect: '/sys/menu',
-  //   name: 'sys',
-  //   meta: {
-  //     title: '系统管理',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'user',
-  //       name: 'user',
-  //       component: () => import('@/views/sys/user/index'),
-  //       meta: { title: '用户管理', icon: 'dashboard' }
-  //     },
-  //     {
-  //       path: 'role',
-  //       name: 'role',
-  //       component: () => import('@/views/sys/role/index'),
-  //       meta: { title: '角色管理', icon: 'dashboard' }
-  //     },
-  //     {
-  //       path: 'menu',
-  //       name: 'menu',
-  //       component: () => import('@/views/sys/menu/index'),
-  //       meta: { title: '菜单管理', icon: 'dashboard' }
-  //     }
-  //   ]
-  // }
 ]
 
 /**

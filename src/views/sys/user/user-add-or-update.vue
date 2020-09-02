@@ -4,6 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
     :show-close="false"
+    :close-on-press-escape="false"
   >
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" @keyup.enter.native="dataFormSubmit()">
       <el-form-item label="用户名" prop="username">
@@ -19,14 +20,14 @@
         <el-input v-model="dataForm.password" type="password" placeholder="密码" autocomplete="off" />
       </el-form-item>
       <el-form-item v-if="state ==='new'" label="确认密码" prop="comfirmPassword">
-        <el-input v-model="dataForm.comfirmPassword" type="password" placeholder="确认密码" />
+        <el-input v-model="dataForm.comfirmPassword" type="password" placeholder="确认密码" autocomplete="off" />
       </el-form-item>
       <el-form-item label="角色" size="mini" prop="roleIdList">
         <el-checkbox-group v-model="dataForm.roleIdList">
           <el-checkbox v-for="role in roleList" :key="role.id" :label="role.id">{{ role.roleName }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item size="mini" label="组织">
+      <el-form-item size="mini" label="组织" prop="partyList">
         <el-tree
           ref="partyList"
           :data="partyList"
@@ -102,6 +103,14 @@ export default {
         callback('请输入正确的邮箱')
       }
     }
+    var validatePartyList = (rule, value, callback) => {
+      const partyList = this.$refs['partyList'].getCheckedNodes()
+      if (partyList.length > 0) {
+        callback()
+      } else {
+        callback('请选择组织')
+      }
+    }
     return {
       menuListTreeProps: {
         label: 'name',
@@ -122,6 +131,12 @@ export default {
         ],
         comfirmPassword: [
           { required: this.state === 'new', validator: validateComfirmPassword, trigger: 'blur' }
+        ],
+        roleIdList: [
+          { required: true, message: '请选择用户角色', trigger: 'blur' }
+        ],
+        partyList: [
+          { validator: validatePartyList, trigger: 'blur' }
         ]
       }
     }
@@ -132,7 +147,7 @@ export default {
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
           if (this.state === 'change') {
-            this.$refs.partyList.setCheckedKeys(this.dataForm.partys.map(_ => _.key))
+            this.$refs.partyList.setCheckedKeys(this.dataForm.partys)
           } else {
             this.$refs.partyList.setCheckedKeys([])
           }

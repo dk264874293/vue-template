@@ -4,6 +4,7 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
     :show-close="false"
+    :close-on-press-escape="false"
   >
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" @keyup.enter.native="dataFormSubmit()">
       <el-form-item label="类型" prop="type">

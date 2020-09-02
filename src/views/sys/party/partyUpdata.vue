@@ -4,6 +4,7 @@
     :close-on-click-modal="false"
     :visible="visible"
     :show-close="false"
+    :close-on-press-escape="false"
   >
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" @keyup.enter.native="dataFormSubmit()">
       <el-form-item label="组织名称" prop="name">
@@ -21,7 +22,9 @@
           default-expand-all
           highlight-current
         />
+        <el-button style="margin-top:10px" type="primary" @click="clearNodeCheck">清空所选组织</el-button>
       </el-form-item>
+
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="$emit('visibleChange')">取消</el-button>
@@ -85,21 +88,25 @@ export default {
           } else {
             this.$refs.menuListTree.setCurrentKey()
           }
+          this.$refs['dataForm'].clearValidate()
         })
       }
     }
   },
   methods: {
+    clearNodeCheck() {
+      this.$refs.menuListTree.setCurrentKey()
+    },
     // 表单提交
     dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const currenKey = this.$refs.menuListTree.getCurrentKey()
           const { parentId } = this.dataForm
-          if (!currenKey && parentId !== 0) {
-            this.$message.error('请选择上级组织')
-            return
-          }
+          // if (!currenKey && parentId !== 0) {
+          //   this.$message.error('请选择上级组织')
+          //   return
+          // }
           const { dataForm, state } = this
           this.$emit('submit', {
             ...dataForm, parentId: parentId === 0 ? 0 : currenKey

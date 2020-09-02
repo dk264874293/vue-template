@@ -4,6 +4,7 @@
     :close-on-click-modal="false"
     :visible="visible"
     :show-close="false"
+    :close-on-press-escape="false"
   >
     <el-form ref="dataForm" :model="dataForm" :rules="dataRule" label-width="80px" @keyup.enter.native="dataFormSubmit()">
       <el-form-item label="角色名称" prop="roleName">
@@ -23,8 +24,8 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="$emit('visibleChange')">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button v-loading="loading" @click="$emit('visibleChange')">取消</el-button>
+      <el-button v-loading="loading" type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -32,6 +33,10 @@
 <script>
 export default {
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     visible: {
       type: Boolean,
       default: false
@@ -80,6 +85,7 @@ export default {
           } else {
             this.$refs.menuListTree.setCheckedKeys([])
           }
+          this.$refs['dataForm'].clearValidate()
         })
       }
     }

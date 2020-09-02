@@ -52,16 +52,18 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      style="margin-top:10px"
-      :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      :total="totalPage"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-    />
+    <div class="clearfix" style="margin-top:20px">
+      <el-pagination
+        style="float:right"
+        :current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="pageSize"
+        :total="totalPage"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="sizeChangeHandle"
+        @current-change="currentChangeHandle"
+      />
+    </div>
     <!-- 弹窗, 云存储配置 -->
     <config
       ref="config"
@@ -84,6 +86,7 @@ import Upload from './oss-upload'
 
 import { getSysOssGetPage, defSysOssDelete } from '@/api/sys'
 export default {
+  name: 'sys-oss',
   components: {
     Config,
     Upload
@@ -109,7 +112,7 @@ export default {
     getDataList() {
       this.dataListLoading = true
       const { pageIndex, pageSize } = this
-      getSysOssGetPage(pageIndex, pageSize)
+      getSysOssGetPage('', pageIndex, pageSize)
         .then(res => {
           const { records, total } = res.page
           this.dataList = records

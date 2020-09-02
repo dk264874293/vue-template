@@ -1,13 +1,13 @@
 {
-  "name": "marcpoint-fast-vue",
-  "version": "4.2.1",
-  "description": "A vue admin template with Element UI & axios & iconfont & permission control & lint",
+  "name": "mp-vue-template",
+  "version": "1.0.0",
+  "description": "",
   "author": "",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
     "build:prod": "vue-cli-service build",
-    "build:stage": "vue-cli-service build --mode staging",
+    "build:uat": "vue-cli-service build --mode uat",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",

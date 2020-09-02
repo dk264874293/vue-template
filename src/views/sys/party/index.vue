@@ -65,7 +65,7 @@ import { treeDataTranslate } from '@/utils'
 import { getSysPartyList,
   addSysPartySave, setSysPartyUpdate, delSysPartyDelete } from '@/api/sys'
 export default {
-  name: 'SysParty',
+  name: 'sys-party',
   components: {
     partyUpdata
   },

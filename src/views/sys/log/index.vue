@@ -1,11 +1,11 @@
 <template>
   <div class="layout_content">
-    <el-form :inline="true" @keyup.enter.native="getDataList()">
+    <el-form :inline="true" @keyup.enter.native="searchData()">
       <el-form-item>
         <el-input v-model="key" placeholder="用户名／用户操作" clearable />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="getDataList()">查询</el-button>
+        <el-button type="primary" :loading="dataListLoading" @click="searchData()">查询</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -71,21 +71,25 @@
         label="创建时间"
       />
     </el-table>
-    <el-pagination
-      :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      :total="totalPage"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-    />
+    <div class="clearfix" style="margin-top:20px">
+      <el-pagination
+        style="float:right"
+        :current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="pageSize"
+        :total="totalPage"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="sizeChangeHandle"
+        @current-change="currentChangeHandle"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { getSysLogList } from '@/api/sys'
 export default {
+  name: 'sys-log',
   data() {
     return {
       key: '',
@@ -101,6 +105,10 @@ export default {
     this.getDataList()
   },
   methods: {
+    searchData() {
+      this.pageIndex = 1
+      this.getDataList()
+    },
     // 获取数据列表
     getDataList() {
       this.dataListLoading = true

@@ -1,11 +1,11 @@
 <template>
   <div class="layout_content">
-    <el-form :inline="true" @keyup.enter.native="getDataList()">
+    <el-form :inline="true" @keyup.enter.native="searchData()">
       <el-form-item>
         <el-input v-model="roleName" placeholder="角色名称" clearable />
       </el-form-item>
       <el-form-item>
-        <el-button v-loading="loading" @click="getDataList()">查询</el-button>
+        <el-button :loading="loading" @click="searchData()">查询</el-button>
         <el-button v-if="isAuth('sys:role:save')" v-loading="loading" type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
@@ -48,18 +48,22 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <el-pagination
-      :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      :total="totalPage"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-    /> -->
+    <div class="clearfix" style="margin-top:20px">
+      <el-pagination
+        style="float:right"
+        :current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="pageSize"
+        :total="totalPage"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="sizeChangeHandle"
+        @current-change="currentChangeHandle"
+      />
+    </div>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
       :visible="updateVisible"
+      :loading="loading"
       :state="dataState"
       :menu-list="menuList"
       :data-form="dataForm"
@@ -74,7 +78,7 @@ import AddOrUpdate from './role-add-or-update'
 import { isAuth } from '@/utils'
 import { getSysRoleGetPage, getSysMenuList, getSysRoleGetOne,
   setSysRoleSave, setSysRoleUpdate, delSysRoleDelete } from '@/api/sys'
-import { treeDataTranslate } from '@/utils'
+import { treeDataTranslate, AddRoleFilter, RemoverRoleFilter } from '@/utils'
 export default {
   name: 'sys-role',
   components: {
@@ -100,23 +104,29 @@ export default {
         remark: null,
         roleName: '',
         updateTime: null
-      }
+      },
+      originalMenuList: []
     }
   },
   mounted() {
     this.getDataList()
     getSysMenuList()
       .then(res => {
+        this.originalMenuList = res.data
         this.menuList = treeDataTranslate(res.data)
       })
   },
   methods: {
+    searchData() {
+      this.pageIndex = 1
+      this.getDataList()
+    },
     // 获取数据列表
     getDataList() {
-      const { roleName } = this
+      const { roleName, pageIndex, pageSize } = this
       this.loading = true
       // roleName, pageIndex, pageSize
-      getSysRoleGetPage(roleName)
+      getSysRoleGetPage(roleName, pageIndex, pageSize)
         .then(res => {
           const { records, total } = res.data
           this.dataList = records
@@ -147,12 +157,17 @@ export default {
     },
     //  修改
     changeUpdateHandle(item) {
+      const { menuList } = this
       this.loading = true
       getSysRoleGetOne(item.id)
         .then(res => {
           this.updateVisibleChange()
           this.dataState = 'change'
-          this.dataForm = { ...res.data }
+          const { originalMenuList } = this
+          const { menuIdList } = res.data
+          // 91 102 103 104 105
+          console.log(RemoverRoleFilter(menuList, menuIdList, originalMenuList))
+          this.dataForm = { ...res.data, menuIdList: RemoverRoleFilter(menuList, menuIdList, originalMenuList) }
         })
         .finally(() => {
           this.loading = false
@@ -160,9 +175,13 @@ export default {
     },
     // 数据提交
     updateHandleSubmit(data, state) {
+      const { menuList, originalMenuList } = this
       const submitFn = state === 'new' ? setSysRoleSave : setSysRoleUpdate
       this.loading = true
-      submitFn(data)
+      const { menuIdList } = data
+      const menuActiveList = menuIdList.concat(AddRoleFilter(menuList, menuIdList, originalMenuList))
+
+      submitFn({ ...data, menuIdList: Array.from(new Set(menuActiveList)) })
         .then(res => {
           this.$message.success('操作成功')
           this.getDataList()

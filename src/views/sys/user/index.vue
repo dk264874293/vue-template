@@ -1,11 +1,11 @@
 <template>
   <div class="layout_content">
-    <el-form :inline="true" @keyup.enter.native="getDataList()">
+    <el-form :inline="true" @keyup.enter.native="searchData()">
       <el-form-item>
         <el-input v-model="selectUserName" placeholder="用户名" clearable />
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
+        <el-button :loading="loading" @click="searchData()">查询</el-button>
         <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
@@ -23,26 +23,43 @@
         label="用户名"
       />
       <el-table-column
-        prop="email"
+        prop="name"
         header-align="center"
         align="center"
-        label="邮箱"
+        label="姓名"
       />
       <el-table-column
-        prop="mobile"
         header-align="center"
         align="center"
-        label="手机号"
-      />
-      <el-table-column
-        prop="status"
-        header-align="center"
-        align="center"
-        label="状态"
+        label="角色"
       >
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">禁用</el-tag>
-          <el-tag v-else size="small">正常</el-tag>
+          <el-popover
+            placement="top-start"
+            width="200"
+            trigger="hover"
+            :content="scope.row.roleNames.join(',')"
+          >
+            <p slot="reference" class="textOverflow">{{ scope.row.roleNames.join(',') }}</p>
+          </el-popover>
+
+        </template>
+      </el-table-column>
+      <el-table-column
+        header-align="center"
+        align="center"
+        label="组织管理"
+      >
+        <template slot-scope="scope">
+          <el-popover
+            placement="top-start"
+            width="200"
+            trigger="hover"
+            :content="scope.row.partys.map(_ => _.val).join(',')"
+          >
+            <p slot="reference" class="textOverflow">{{ scope.row.partys.map(_ => _.val).join(',') }}</p>
+          </el-popover>
+
         </template>
       </el-table-column>
       <el-table-column
@@ -61,21 +78,23 @@
       >
         <template slot-scope="scope">
           <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="changeUpdateHandle(scope.row)">修改</el-button>
-          <el-button v-if="isAuth('sys:user:reset')" type="text" size="small" @click="resetUser(scope.row)">重置</el-button>
+          <el-button v-if="isAuth('sys:user:resetpwd')" type="text" size="small" @click="resetUser(scope.row)">重置</el-button>
           <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      style="margin-top:20px"
-      :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      :total="totalPage"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-    />
+    <div class="clearfix" style="margin-top:20px">
+      <el-pagination
+        style="float:right"
+        :current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="pageSize"
+        :total="totalPage"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="sizeChangeHandle"
+        @current-change="currentChangeHandle"
+      />
+    </div>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update
       :visible="updateVisible"
@@ -91,12 +110,12 @@
 
 <script>
 import AddOrUpdate from './user-add-or-update'
-import { isAuth, treeDataTranslate } from '@/utils'
+import { isAuth, treeDataTranslate, RemoverRoleFilter } from '@/utils'
 import { getSysUserList, getSysUserGetOne, setSysUserSave,
   setSysUserUpdate, delSysUserDelete, getSysPartyList,
-  getSysRoleSelect, setSysUserResetPwd } from '@/api/sys'
+  getSysRoleGetPage, setSysUserResetPwd } from '@/api/sys'
 export default {
-  name: 'sys-user',
+  // name: 'sys-user',
   components: {
     AddOrUpdate
   },
@@ -124,21 +143,27 @@ export default {
         username: '',
         name: '',
         menuIdList: []
-      }
+      },
+      originalMenuList: []
     }
   },
   mounted() {
     this.getDataList()
     getSysPartyList()
       .then(res => {
+        this.originalMenuList = res.data
         this.partyList = treeDataTranslate(res.data)
       })
-    getSysRoleSelect()
+    getSysRoleGetPage('', 1, 1, false)
       .then(res => {
-        this.roleList = res.list
+        this.roleList = res.data.records
       })
   },
   methods: {
+    searchData() {
+      this.pageIndex = 1
+      this.getDataList()
+    },
     // 获取数据列表
     getDataList() {
       this.loading = true
@@ -179,7 +204,9 @@ export default {
       getSysUserGetOne(item.id)
         .then(res => {
           this.updateState = 'change'
-          this.dataForm = { ...res.user, password: '' }
+          const { partyList, originalMenuList } = this
+          const { partys } = res.user
+          this.dataForm = { ...res.user, password: '', partys: RemoverRoleFilter(partyList, partys.map(_ => _.key), originalMenuList) }
           this.changeVisible()
         })
         .finally(() => {

@@ -4,6 +4,7 @@
     :close-on-click-modal="false"
     :visible="visible"
     :show-close="false"
+    :close-on-press-escape="false"
   >
     <el-upload
       drag
@@ -42,7 +43,7 @@ export default {
     }
   },
   mounted() {
-    this.url = baseURL + 'sys/oss/upload?token=' + this.$store.getters.token
+    this.url = baseURL + '/sys/oss/upload?token=' + this.$store.getters.token
   },
   methods: {
     // 上传之前
