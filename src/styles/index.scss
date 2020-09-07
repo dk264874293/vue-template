@@ -11,6 +11,10 @@ body {
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
 }
+h1,h2,h3,h4,h5,h6,p{
+  margin: 0;
+  font-weight: normal;
+}
 
 label {
   font-weight: 700;
@@ -18,17 +22,26 @@ label {
 
 html {
   height: 100%;
-  box-sizing: border-box;
 }
 
 #app {
   height: 100%;
+  display: flex;
+  flex-direction: row;
+  min-height: 750px;
+  min-width: 1180px;
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
+
+
+// *,
+// *:before,
+// *:after {
+//   box-sizing: inherit;
+// }
+
+div,p,h1,h2,h3,h4,h5,h6{
+  box-sizing: border-box;
 }
 
 a:focus,
@@ -59,6 +72,13 @@ div:focus {
   }
 }
 
+.textOverflow{
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 // main-container global css
 .app-container {
   padding: 20px;
@@ -69,4 +89,22 @@ div:focus {
   box-shadow:0px 2px 6px 0px rgba(0,0,0,0.06);
   border-radius:4px;
   padding: 20px;
+}
+.layout_title{
+  border-left: 6px solid #3674EF;
+  padding-left: 10px;
+  font-size:16px;
+  font-weight:400;
+  color:rgba(96,98,102,1);
+  line-height:22px;
+  margin-bottom: 20px;
+}
+
+.edui-button.edui-for-xiumi-connect .edui-button-wrap .edui-button-body .edui-icon {
+  background-image: url("http://xiumi.us/connect/ue/xiumi-connect-icon.png") !important;
+  background-size: contain;
+}
+
+.el-link{
+  font-size: 12px;
 }

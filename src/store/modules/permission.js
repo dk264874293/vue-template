@@ -63,11 +63,13 @@ function fnAddDynamicMenuRoutes(menuList = [], routes = []) {
       meta: { title: '主入口整体布局' },
       children: routes
     }
+
     router.addRoutes([
       mainRoutes,
       { path: '*', redirect: { name: '404' }}
     ])
   }
+
   return routes
 }
 
@@ -105,13 +107,6 @@ const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       const asyncRoutes = fnAddDynamicMenuRoutes(roles)// asyncRoutes
-      // console.log(accessedRoutes, 'accessedRoutes')
-      // if (roles.includes('admin')) {
-      //   accessedRoutes = asyncRoutes || []
-      // } else {
-      //   accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      // }
-      // asyncRoutes
       commit('SET_ROUTES', asyncRoutes.map(_ => _.path))
       resolve()
     })

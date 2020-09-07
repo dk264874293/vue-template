@@ -38,6 +38,17 @@ export function setSysUserUpdate(data) {
   })
 }
 
+// 修改用户密码
+export function setSysUserPassword(userId, password, newPassword) {
+  return request({
+    url: '/sys/user/password',
+    method: 'post',
+    data: {
+      userId, password, newPassword
+    }
+  })
+}
+
 // 重置用户密码
 export function setSysUserResetPwd(userId) {
   return request({
