@@ -1,74 +1,74 @@
 <template>
   <div class="login-container">
-    <div class="login-header">
+    <div class="login-header clearfix">
       <img src="../../assets/pic_logo@2x.png" alt="">
     </div>
     <div class="login-body">
-      <div class="login-bg" />
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginRules"
-        class="login-form"
-        auto-complete="on"
-        label-position="left"
-      >
-        <div class="title-container">
-          <h3 class="title">欢迎使用宏原SCRM系统
-          </h3>
-        </div>
-        <el-form-item prop="username">
-          <el-input
-            ref="username"
-            v-model="loginForm.username"
-            placeholder="请输入用户名"
-            name="username"
-            type="text"
-            tabindex="1"
-            auto-complete="on"
-          />
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="请输入密码"
-            name="password"
-            tabindex="2"
-            auto-complete="on"
-            @keyup.enter.native="handleLogin"
-          />
-          <!-- <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span> -->
-        </el-form-item>
-        <el-row :gutter="10">
-          <el-col :span="18">
-            <el-form-item prop="captcha">
-              <el-input
-                ref="captcha"
-                v-model="loginForm.captcha"
-                placeholder="请输入验证码"
-                name="captcha"
-                tabindex="3"
-                auto-complete="on"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <img :src="captchaPath" class="login-captcha" alt @click="getCaptcha()">
-          </el-col>
-        </el-row>
+      <div class="login-content">
+        <img src="../../assets/pic_Illustration_logon@2x.png" alt="">
 
-        <el-button
-          :loading="loading"
-          class="login-btn"
-          type="primary"
-          @click.native.prevent="handleLogin"
-        >登陆</el-button>
-      </el-form>
+        <el-form
+          ref="loginForm"
+          :model="loginForm"
+          :rules="loginRules"
+          class="login-form"
+          auto-complete="on"
+          label-position="left"
+          @keyup.enter.native="handleLogin"
+        >
+          <div class="title-container">
+            <h3 class="title">欢迎使用宏原SCRM系统
+            </h3>
+          </div>
+          <el-form-item prop="username">
+            <el-input
+              ref="username"
+              v-model="loginForm.username"
+              placeholder="请输入用户名"
+              name="username"
+              type="text"
+              tabindex="1"
+              auto-complete="on"
+            />
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model="loginForm.password"
+              :type="passwordType"
+              placeholder="请输入密码"
+              name="password"
+              tabindex="2"
+              auto-complete="on"
+            />
+          </el-form-item>
+          <el-row :gutter="10">
+            <el-col :span="18">
+              <el-form-item prop="captcha">
+                <el-input
+                  ref="captcha"
+                  v-model="loginForm.captcha"
+                  placeholder="请输入验证码"
+                  name="captcha"
+                  tabindex="3"
+                  auto-complete="on"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <img :src="captchaPath" class="login-captcha" alt @click="getCaptcha()">
+            </el-col>
+          </el-row>
+          <el-button
+            :loading="loading"
+            class="login-btn"
+            type="primary"
+            @click.native.prevent="handleLogin"
+          >登录</el-button>
+        </el-form>
+      </div>
+
     </div>
     <div class="login-floot">
       沪ICP备案13038549号    上海宏原信息科技有限公司SCRM系统
@@ -116,9 +116,11 @@ export default {
   },
   mounted() {
     if (process.env.NODE_ENV === 'development') {
-      this.loginForm.username = 'admin'
-      this.loginForm.password = 'admin'
+      this.loginForm.username = 'testWang'
+      this.loginForm.password = '123456'
     }
+    // [][(([]+![])[+!![]+!![]+!![]])+(([]+{})[+!![]])+(([]+!![])[+!![]])+(([]+!![])[+[]])][(([]+{})[+!![]+!![]+!![]+!![]+!![]])+(([]+{})[+!![]])+(([]+[][[]])[+!![]])+(([]+![])[+!![]+!![]+!![]])+(([]+!![])[+[]])+(([]+!![])[+!![]])+(([]+[][[]])[+[]])+(([]+{})[+!![]+!![]+!![]+!![]+!![]])+(([]+!![])[+[]])+(([]+{})[+!![]])+(([]+!![])[+!![]])]((([]+!![])[+!![]])+(([]+!![])[+!![]+!![]+!![]])+(([]+!![])[+[]])+(([]+[][[]])[+[]])+(([]+!![])[+!![]])+(([]+[][[]])[+!![]])+(([]+{})[+!![]+!![]+!![]+!![]+!![]+!![]+!![]])+(([]+[][[]])[+[]])+(([]+[][[]])[+!![]])+(([]+!![])[+!![]+!![]+!![]])+(([]+![])[+!![]+!![]+!![]])+(([]+{})[+!![]+!![]+!![]+!![]+!![]])+(([]+![])[+!![]])+((+([]+(+!![]+!![])+(+!![]+!![]+!![]+!![]+!![])))[(([]+!![])[+[]])+(([]+{})[+!![]])+(([]+([]+[])[(([]+{})[+!![]+!![]+!![]+!![]+!![]])+(([]+{})[+!![]])+(([]+[][[]])[+!![]])+(([]+![])[+!![]+!![]+!![]])+(([]+!![])[+[]])+(([]+!![])[+!![]])+(([]+[][[]])[+[]])+(([]+{})[+!![]+!![]+!![]+!![]+!![]])+(([]+!![])[+[]])+(([]+{})[+!![]])+(([]+!![])[+!![]])])[+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]])+(([]+!![])[+[]])+(([]+!![])[+!![]])+(([]+[][[]])[+!![]+!![]+!![]+!![]+!![]])+(([]+[][[]])[+!![]])+(([]+([]+[])[(([]+{})[+!![]+!![]+!![]+!![]+!![]])+(([]+{})[+!![]])+(([]+[][[]])[+!![]])+(([]+![])[+!![]+!![]+!![]])+(([]+!![])[+[]])+(([]+!![])[+!![]])+(([]+[][[]])[+[]])+(([]+{})[+!![]+!![]+!![]+!![]+!![]])+(([]+!![])[+[]])+(([]+{})[+!![]])+(([]+!![])[+!![]])])[+([]+(+!![])+(+!![]+!![]+!![]+!![]))])](+([]+(+!![]+!![]+!![])+(+!![]+!![]+!![]+!![]+!![]+!![]))))+(([]+!![])[+!![]+!![]+!![]]))()(('%'+([]+(+!![]+!![]+!![]+!![]+!![]+!![]+!![]))+([]+(+!![]+!![])))+('%'+([]+(+!![]+!![]+!![]+!![]+!![]+!![]))+([]+(+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![])))+('%'+([]+(+!![]+!![]+!![]+!![]+!![]+!![]))+([]+(+!![]+!![]+!![])))+('%'+([]+(+!![]+!![]+!![]+!![]+!![]+!![]))+([]+(+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]))))
+
     this.getCaptcha()
   },
   methods: {
@@ -141,6 +143,7 @@ export default {
             .then(() => {
               this.$router.push({ path: this.redirect || '/' })
               this.loading = false
+              // (!~+[] + {})[--[~+""][+[]] * [~+[]] + ~~!+[]] + ({} + [])[[~!+[]] * ~+[]]
             })
             .catch(() => {
               this.getCaptcha()
@@ -216,12 +219,13 @@ $dark_gray: #889aa4;
 $light_gray: #eee;
 
 .login-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: #261A70;
+  flex:1;
+  display: flex;
+  flex-direction: column;
+
   .login-header{
     width: 100%;
-    height: 60px;
+    // height: 60px;
     padding: 10px 20px;
     background-color: #fff;;
     img{
@@ -231,42 +235,44 @@ $light_gray: #eee;
     }
   }
   .login-body{
-    width: 1180px;
-    height:1080px;
-    margin: 0 auto;
+    flex:1;
+    background-image: url('../../assets/pic_bgd_logon@2x.jpg');
+    background-size: cover;
     position: relative;
     background-size: cover;
+    overflow: hidden;
+    .login-content{
+      width:1180px;
+      height: 540px;
+      position: absolute;
+      top:50%;
+      left: 50%;
+      margin-top: -270px;;
+      margin-left: -590px;
+      img{
+        width: 750px;
+      }
+      .login-form {
+        margin-top: 70px;;
+        float: right;
+        width:420px;
+        box-sizing: border-box;
+        background:linear-gradient(180deg,rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.1) 100%);
+        box-shadow:2px 6px 24px 0px rgba(0,0,0,0.08),1px 1px 2px 0px rgba(255,255,255,0.5);
+        border-radius:10px;
+        padding:60px 44px;
+        .login-captcha {
+          width: 100%;
+          height: 42px;
+          border-radius:4px;
+        }
+        .login-btn{
+          width: 100%;
+          margin-top: 20px;
+        }
+      }
+    }
 
-    // overflow: hidden;
-    .login-bg{
-      position: absolute;
-      top: 0px;
-      left:-400px;
-      right: -400px;
-      bottom: 0;
-      background-image: url("../../assets/login_bg.jpg");
-      background-size: cover;
-    }
-    .login-form {
-      position: absolute;
-      top: 300px;
-      right: -180px;
-      width:500px;
-      height:433px;
-      background:linear-gradient(180deg,rgba(255,255,255,0.2) 0%,rgba(255,255,255,0.1) 100%);
-      box-shadow:2px 6px 24px 0px rgba(0,0,0,0.08),1px 1px 2px 0px rgba(255,255,255,0.5);
-      border-radius:10px;
-      padding:60px 44px;
-      .login-captcha {
-        width: 100%;
-        height: 42px;
-        border-radius:4px;
-      }
-      .login-btn{
-        width: 100%;
-        margin-top: 20px;
-      }
-    }
   }
   .login-floot{
     width:100%;
